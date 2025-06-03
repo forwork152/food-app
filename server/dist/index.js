@@ -38,10 +38,10 @@ app.use("/api/v1/auth", UserRoute_1.default);
 app.use("/api/v1/resturent", ResturentRoutes_1.resturentRoute);
 app.use("/api/v1/menu", MenuRoute_1.default);
 app.use("/api/v1/order", orderRoute_1.default);
-app.use(express_1.default.static(path_1.default.resolve(__dirname, "../../front/dist")));
+app.use(express_1.default.static(path_1.default.join(__dirname, "front", "dist")));
 // Handle all other routes by serving the React app
 app.get("*", (req, res, next) => {
-    res.sendFile(path_1.default.resolve(__dirname, "../../front/dist", "index.html"), (err) => {
+    res.sendFile(path_1.default.join(__dirname, "front", "dist", "index.html"), (err) => {
         if (err) {
             next(err);
         }

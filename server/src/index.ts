@@ -42,18 +42,15 @@ app.use("/api/v1/resturent", resturentRoute);
 app.use("/api/v1/menu", menuRoute);
 app.use("/api/v1/order", orderRoute);
 
-app.use(express.static(path.resolve(__dirname, "../../front/dist")));
+app.use(express.static(path.join(__dirname, "front", "dist")));
 
 // Handle all other routes by serving the React app
 app.get("*", (req: Request, res: Response, next: NextFunction) => {
-  res.sendFile(
-    path.resolve(__dirname, "../../front/dist", "index.html"),
-    (err) => {
-      if (err) {
-        next(err);
-      }
+  res.sendFile(path.join(__dirname, "front", "dist", "index.html"), (err) => {
+    if (err) {
+      next(err);
     }
-  );
+  });
 });
 
 app.listen(PORT, () => {
