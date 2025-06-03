@@ -24,7 +24,7 @@ app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
-    origin: "https://food-app-production-ac62.up.railway.app",
+    origin: "https://food-app-production-ac62.up.railway.app/",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
@@ -38,10 +38,10 @@ app.use("/api/v1/auth", UserRoute_1.default);
 app.use("/api/v1/resturent", ResturentRoutes_1.resturentRoute);
 app.use("/api/v1/menu", MenuRoute_1.default);
 app.use("/api/v1/order", orderRoute_1.default);
-app.use(express_1.default.static(path_1.default.join(__dirname, "front", "dist")));
+app.use(express_1.default.static(path_1.default.resolve(__dirname, "../../front/dist")));
 // Handle all other routes by serving the React app
 app.get("*", (req, res, next) => {
-    res.sendFile(path_1.default.join(__dirname, "front", "dist", "index.html"), (err) => {
+    res.sendFile(path_1.default.resolve(__dirname, "../../front/dist", "index.html"), (err) => {
         if (err) {
             next(err);
         }
