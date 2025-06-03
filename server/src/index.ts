@@ -24,12 +24,13 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "https://food-app-production-ac62.up.railway.app/",
+    origin: "https://food-app-production-3bb9.up.railway.app/",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   })
 );
+app.use(cors());
 
 // Add these headers to all responses
 app.use((req, res, next) => {

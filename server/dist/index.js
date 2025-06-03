@@ -24,11 +24,12 @@ app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
-    origin: "https://food-app-production-ac62.up.railway.app/",
+    origin: "https://food-app-production-3bb9.up.railway.app/",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
 }));
+app.use((0, cors_1.default)());
 // Add these headers to all responses
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Credentials", "true");
