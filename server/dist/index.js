@@ -23,8 +23,9 @@ app.use(body_parser_1.default.json({ limit: "10mb" })); // Parses JSON requests
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
+// cors
 app.use((0, cors_1.default)({
-    origin: "https://food-app-production-2cd7.up.railway.app",
+    origin: "https://food-app-production-97dd.up.railway.app/",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
