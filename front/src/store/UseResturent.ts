@@ -3,12 +3,34 @@ import axios from "axios";
 import { toast } from "sonner";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { gql } from "@apollo/client";
+import client from "@/lib/apolloClient";
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
-
 const API_ENDPOINT = `${API_URL}/api/v1/resturent`;
-
 axios.defaults.withCredentials = true;
+
+// Graph Ql integration
+
+export const GET_RESTAURANT = gql`
+  query GetRestaurant($id: ID!) {
+    getRestaurant(id: $id) {
+      resturentName
+      user
+      deliveryTime
+      imageFile
+      cusines
+      menu {
+        _id
+        name
+        description
+        price
+        image
+      }
+    }
+  }
+`;
+
 const useResturent = create<ResturentTypes>()(
   persist(
     (set) => ({
@@ -92,21 +114,24 @@ const useResturent = create<ResturentTypes>()(
         }
       },
 
-      GetSingleResturent: async (resturentId: string) => {
+      GetRestaurant: async (id: string) => {
         try {
-          const response = await axios.get(
-            `${API_ENDPOINT}/resturents/${resturentId}`
-          );
-          if (response.data.success) {
-            console.log(response.data.resturent);
-            set({ singleResturent: response.data.resturent });
-          } else {
-            set({ singleResturent: null });
-          }
+          set({ loading: true });
+          const { data } = await client.query({
+            query: GET_RESTAURANT,
+            variables: { id },
+            fetchPolicy: "no-cache",
+          });
+          set({ singleResturent: data.getRestaurant });
         } catch (error: any) {
-          toast.error(error.message || "Error updating menu");
+          console.error("Error fetching restaurant:", error.message);
+          set({ singleResturent: null });
+        } finally {
+          set({ loading: false });
         }
       },
+
+      
 
       // Menus Related
 

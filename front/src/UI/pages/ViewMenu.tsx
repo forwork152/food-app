@@ -13,12 +13,13 @@ import { toast } from "sonner";
 const ViewMenu = () => {
   const { addToCart } = UseCartStore();
   const params = useParams();
-  const { singleResturent, GetSingleResturent, loading } = useResturent();
+  const { singleResturent,  GetRestaurant, loading } =
+    useResturent();
 
   useEffect(() => {
     const paramsId = params.id!;
-    GetSingleResturent(paramsId);
-  }, [GetSingleResturent, params.id]);
+    GetRestaurant(paramsId);
+  }, [GetRestaurant, params.id]);
 
   const navigate = useNavigate();
 

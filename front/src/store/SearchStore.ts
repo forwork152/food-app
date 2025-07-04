@@ -33,7 +33,7 @@ const SearchStore = create<SearchStoreState>()(
     (set, get) => ({
       loading: false,
       mainSearch: "",
-      searchQuery: "", // Single input field for city or restaurant name
+      searchQuery: "",
       cuisines: [],
       S_restaurants: [],
 
@@ -58,7 +58,7 @@ const SearchStore = create<SearchStoreState>()(
         set({ loading: true });
         const { mainSearch } = SearchStore.getState();
         try {
-          await new Promise((resolve) => setTimeout(resolve, 500)); 
+          await new Promise((resolve) => setTimeout(resolve, 500));
           const response = await axios.get(`${API_ENDPOINT}/search/location`, {
             params: { mainSearch },
           });
@@ -79,8 +79,6 @@ const SearchStore = create<SearchStoreState>()(
         set({ loading: true });
         const { searchQuery } = SearchStore.getState();
         try {
-          await new Promise((resolve) => setTimeout(resolve, 500)); // for show skeleton purpose
-          // Call the API for searching by restaurantName or city
           const response = await axios.get(
             `${API_ENDPOINT}/search/searchByname`,
             {

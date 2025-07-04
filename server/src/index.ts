@@ -1,66 +1,103 @@
+// src/index.ts
 import express, { Request, Response, NextFunction } from "express";
-import userRoute from "./routes/UserRoute";
+import dotenv from "dotenv";
+import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@as-integrations/express4";
+import { createClient } from "redis";
+
+import connectDB from "./utils/DB";
+import userRoute from "./routes/UserRoute";
 import { resturentRoute } from "./routes/ResturentRoutes";
 import orderRoute from "./routes/orderRoute";
 import menuRoute from "./routes/MenuRoute";
-import connectDB from "./utils/DB";
-import dotenv from "dotenv";
-import cors from "cors";
+import { typeDefs } from "./Graphql/schema/typeDefs";
+import { Resolver } from "./Graphql/resolvers/Resolvers";
 import path from "path";
+
 dotenv.config();
 connectDB();
 
-const app = express();
-const PORT = process.env.PORT || 5200;
-
-// const _dirname = path.resolve();
-
-app.use(bodyParser.json({ limit: "10mb" })); // Parses JSON requests
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(cookieParser());
-
-// cors
-
-app.use(
-  cors({
-    origin: "https://food-app-production-97dd.up.railway.app/",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-  })
-);
-app.use(cors());
-
-// Add these headers to all responses
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Credentials", "true");
-  next();
+export const redisClient = createClient({
+  url: process.env.REDIS_URL,
 });
 
-app.use("/api/v1/auth", userRoute);
-app.use("/api/v1/resturent", resturentRoute);
-app.use("/api/v1/menu", menuRoute);
-app.use("/api/v1/order", orderRoute);
+redisClient
+  .connect()
+  .then(() => console.log("✅ Connected to Redis"))
+  .catch((err: Error) => {
+    console.error("❌ Redis connection failed:", err.message);
+    setTimeout(() => process.exit(1), 1000);
+  });
 
-app.use(express.static(path.resolve(__dirname, "../../front/dist")));
+const startServer = async () => {
+  const PORT = process.env.PORT || 5200;
+  const app = express();
 
-// Handle all other routes by serving the React app
-app.get("*", (req: Request, res: Response, next: NextFunction) => {
-  res.sendFile(
-    path.resolve(__dirname, "../../front/dist", "index.html"),
-    (err) => {
-      if (err) {
-        next(err);
-      }
-    }
+  // Middleware setup
+  app.use(bodyParser.json({ limit: "10mb" }));
+  app.use(express.urlencoded({ extended: true }));
+  app.use(express.json());
+  app.use(cookieParser());
+
+  // CORS setup
+  app.use(
+    cors({
+      origin: "http://localhost:5173",
+      credentials: true,
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    })
   );
-});
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+  // Allow credentials on all responses
+  app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Credentials", "true");
+    next();
+  });
 
-export default app;
+  // GraphQL server setup
+  const apolloServer = new ApolloServer({
+    typeDefs,
+    resolvers: Resolver,
+  });
+
+  await apolloServer.start();
+
+  app.use(
+    "/graphql",
+    cors<cors.CorsRequest>(),
+    express.json(),
+    expressMiddleware(apolloServer, {
+      context: async ({ req }) => ({ token: req.headers.token }),
+    })
+  );
+
+  // REST API routes
+  app.use("/api/v1/auth", userRoute);
+  app.use("/api/v1/resturent", resturentRoute);
+  app.use("/api/v1/menu", menuRoute);
+  app.use("/api/v1/order", orderRoute);
+
+  // Serve frontend static files
+  const staticPath = path.resolve(__dirname, "../../front/dist");
+  app.use(express.static(staticPath));
+
+  // Serve React app for all other routes
+  app.get("*", (_: Request, res: Response) => {
+    res.sendFile(path.join(staticPath, "index.html"), (err) => {
+      if (err) {
+        res.status(500).send("Failed to load the frontend files.");
+      }
+    });
+  });
+
+  // Start the server
+  app.listen(PORT, () => {
+    console.log(`🚀 Server ready at http://localhost:${PORT}`);
+  });
+};
+
+startServer();

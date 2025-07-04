@@ -18,6 +18,7 @@ const ImageUpload_1 = __importDefault(require("../helper/ImageUpload"));
 const OrderSchema_1 = __importDefault(require("../models/OrderSchema"));
 const RestaurentSchema_1 = require("../schema/RestaurentSchema");
 const Restaurent_service_1 = require("../service/Restaurent.service");
+const __1 = require("..");
 const CreateResturent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Validate request body using Zod
@@ -38,7 +39,6 @@ const CreateResturent = (req, res) => __awaiter(void 0, void 0, void 0, function
 exports.CreateResturent = CreateResturent;
 const GetResturent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("Fetching restaurant for user:", req.id);
         const resturent = yield ResturentSchema_1.default.findOne({ user: req.id }).populate("menu");
         if (!resturent) {
             return res.status(400).json({
@@ -147,30 +147,74 @@ const searchByLocation = (req, res) => __awaiter(void 0, void 0, void 0, functio
     const { mainSearch } = req.query;
     try {
         if (typeof mainSearch !== "string") {
-            return res.status(400).json({ message: "searchQuery is required" });
+            return res.status(400).json({ message: "mainSearch is required" });
         }
-        const searchRegex = new RegExp(mainSearch, "i"); // Case-insensitive search
-        // Search for either restaurantName or city
+        const cacheKey = `search:${mainSearch.toLowerCase()}`;
+        //  Try getting cached result
+        const cachedData = yield __1.redisClient.get(cacheKey);
+        if (cachedData) {
+            return res.status(200).json({
+                success: true,
+                data: JSON.parse(cachedData),
+                cached: true,
+            });
+        }
+        //  If not cached, fetch from MongoDB
+        const searchRegex = new RegExp(mainSearch, "i");
         const restaurants = yield ResturentSchema_1.default.find({
             $or: [{ resturentName: searchRegex }, { country: searchRegex }],
         });
-        console.log("Search Query:", { mainSearch });
+        //  Save to Redis with 1 hour expiration
+        yield __1.redisClient.set(cacheKey, JSON.stringify(restaurants), { EX: 3600 });
         return res.status(200).json({
             success: true,
             data: restaurants,
+            cached: false,
         });
     }
     catch (error) {
         console.error("Error fetching restaurants:", error);
-        res.status(500).json({ message: "Error fetching restaurants", error });
+        return res.status(500).json({ message: "Internal Server Error", error });
     }
 });
 exports.searchByLocation = searchByLocation;
+// export const searchByLocation = async (
+//   req: Request,
+//   res: Response
+// ): Promise<any> => {
+//   const { mainSearch } = req.query;
+//   try {
+//     if (typeof mainSearch !== "string") {
+//       return res.status(400).json({ message: "searchQuery is required" });
+//     }
+//     const searchRegex = new RegExp(mainSearch, "i"); // Case-insensitive search
+//     // Search for either restaurantName or city
+//     const restaurants = await ResturentModel.find({
+//       $or: [{ resturentName: searchRegex }, { country: searchRegex }],
+//     });
+//     return res.status(200).json({
+//       success: true,
+//       data: restaurants,
+//     });
+//   } catch (error) {
+//     console.error("Error fetching restaurants:", error);
+//     res.status(500).json({ message: "Error fetching restaurants", error });
+//   }
+// };
 const searchByCityOrRestaurantName = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { searchQuery } = req.query; // This will be the single input for both city and restaurantName
     try {
         if (typeof searchQuery !== "string") {
             return res.status(400).json({ message: "searchQuery is required" });
+        }
+        const cacheKey = `cityOrRestaurantName_search:${searchQuery.toLowerCase()}`;
+        const cachedData = yield __1.redisClient.get(cacheKey);
+        if (cachedData) {
+            return res.status(200).json({
+                success: true,
+                data: JSON.parse(cachedData),
+                cached: true,
+            });
         }
         const searchRegex = new RegExp(searchQuery, "i"); // Case-insensitive search
         // Search for either restaurantName or city
@@ -181,11 +225,12 @@ const searchByCityOrRestaurantName = (req, res) => __awaiter(void 0, void 0, voi
                 { cusines: searchRegex },
             ],
         });
-        console.log("Search Query:", { searchQuery });
-        console.log("Found Restaurants:", restaurants);
+        // /  Save to Redis with 1 hour expiration
+        yield __1.redisClient.set(cacheKey, JSON.stringify(restaurants), { EX: 3600 });
         return res.status(200).json({
             success: true,
             data: restaurants,
+            cached: false,
         });
     }
     catch (error) {
@@ -202,7 +247,6 @@ const searchByCuisines = (req, res) => __awaiter(void 0, void 0, void 0, functio
             query.cusines = { $in: cuisines };
         }
         const restaurants = yield ResturentSchema_1.default.find(query);
-        console.log("Cusine body :", cuisines);
         return res.status(200).json({
             success: true,
             data: restaurants,

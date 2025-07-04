@@ -31,5 +31,6 @@ export type ResturentTypes = {
   addMenuResturent: (menuId: string) => Promise<void>;
   updatedMenuResturent: (updateMenu: any) => Promise<any>;
   deleteMenuResturent: (menuId: string) => Promise<void>;
-  GetSingleResturent: (resturentId: string) => Promise<void>;
+  GetRestaurant: (resturentId: string) => Promise<void>;
+  reset: () => void;
 };

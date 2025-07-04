@@ -8,6 +8,7 @@ import {
   GetOrderService,
   GetSingleResturentService,
 } from "../service/Restaurent.service";
+import { redisClient } from "..";
 
 export const CreateResturent = async (
   req: Request,
@@ -53,7 +54,6 @@ export const GetResturent = async (
   res: Response
 ): Promise<any> => {
   try {
-    console.log("Fetching restaurant for user:", req.id);
     const resturent = await ResturentModel.findOne({ user: req.id }).populate(
       "menu"
     );
@@ -187,27 +187,68 @@ export const searchByLocation = async (
 
   try {
     if (typeof mainSearch !== "string") {
-      return res.status(400).json({ message: "searchQuery is required" });
+      return res.status(400).json({ message: "mainSearch is required" });
     }
 
-    const searchRegex = new RegExp(mainSearch, "i"); // Case-insensitive search
+    const cacheKey = `search:${mainSearch.toLowerCase()}`;
 
-    // Search for either restaurantName or city
+    //  Try getting cached result
+    const cachedData = await redisClient.get(cacheKey);
+    if (cachedData) {
+      return res.status(200).json({
+        success: true,
+        data: JSON.parse(cachedData),
+        cached: true,
+      });
+    }
+
+    //  If not cached, fetch from MongoDB
+    const searchRegex = new RegExp(mainSearch, "i");
     const restaurants = await ResturentModel.find({
       $or: [{ resturentName: searchRegex }, { country: searchRegex }],
     });
 
-    console.log("Search Query:", { mainSearch });
+    //  Save to Redis with 1 hour expiration
+    await redisClient.set(cacheKey, JSON.stringify(restaurants), { EX: 3600 });
 
     return res.status(200).json({
       success: true,
       data: restaurants,
+      cached: false,
     });
   } catch (error) {
     console.error("Error fetching restaurants:", error);
-    res.status(500).json({ message: "Error fetching restaurants", error });
+    return res.status(500).json({ message: "Internal Server Error", error });
   }
 };
+
+// export const searchByLocation = async (
+//   req: Request,
+//   res: Response
+// ): Promise<any> => {
+//   const { mainSearch } = req.query;
+
+//   try {
+//     if (typeof mainSearch !== "string") {
+//       return res.status(400).json({ message: "searchQuery is required" });
+//     }
+
+//     const searchRegex = new RegExp(mainSearch, "i"); // Case-insensitive search
+
+//     // Search for either restaurantName or city
+//     const restaurants = await ResturentModel.find({
+//       $or: [{ resturentName: searchRegex }, { country: searchRegex }],
+//     });
+
+//     return res.status(200).json({
+//       success: true,
+//       data: restaurants,
+//     });
+//   } catch (error) {
+//     console.error("Error fetching restaurants:", error);
+//     res.status(500).json({ message: "Error fetching restaurants", error });
+//   }
+// };
 
 export const searchByCityOrRestaurantName = async (
   req: Request,
@@ -218,6 +259,18 @@ export const searchByCityOrRestaurantName = async (
   try {
     if (typeof searchQuery !== "string") {
       return res.status(400).json({ message: "searchQuery is required" });
+    }
+
+    const cacheKey = `cityOrRestaurantName_search:${searchQuery.toLowerCase()}`;
+
+    const cachedData = await redisClient.get(cacheKey);
+
+    if (cachedData) {
+      return res.status(200).json({
+        success: true,
+        data: JSON.parse(cachedData),
+        cached: true,
+      });
     }
 
     const searchRegex = new RegExp(searchQuery, "i"); // Case-insensitive search
@@ -231,12 +284,13 @@ export const searchByCityOrRestaurantName = async (
       ],
     });
 
-    console.log("Search Query:", { searchQuery });
-    console.log("Found Restaurants:", restaurants);
+    // /  Save to Redis with 1 hour expiration
+    await redisClient.set(cacheKey, JSON.stringify(restaurants), { EX: 3600 });
 
     return res.status(200).json({
       success: true,
       data: restaurants,
+      cached: false,
     });
   } catch (error) {
     console.error("Error fetching restaurants:", error);
@@ -256,7 +310,6 @@ export const searchByCuisines = async (
     }
 
     const restaurants = await ResturentModel.find(query);
-    console.log("Cusine body :", cuisines);
     return res.status(200).json({
       success: true,
       data: restaurants,
