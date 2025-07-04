@@ -22,9 +22,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
+// cors
+
 app.use(
   cors({
-    origin: "https://food-app-production-2cd7.up.railway.app",
+    origin: "https://food-app-production-97dd.up.railway.app/",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
