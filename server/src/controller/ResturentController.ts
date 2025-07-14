@@ -8,7 +8,6 @@ import {
   GetOrderService,
   GetSingleResturentService,
 } from "../service/Restaurent.service";
-import { redisClient } from "..";
 
 export const CreateResturent = async (
   req: Request,
@@ -190,17 +189,17 @@ export const searchByLocation = async (
       return res.status(400).json({ message: "mainSearch is required" });
     }
 
-    const cacheKey = `search:${mainSearch.toLowerCase()}`;
+    // const cacheKey = `search:${mainSearch.toLowerCase()}`;
 
-    //  Try getting cached result
-    const cachedData = await redisClient.get(cacheKey);
-    if (cachedData) {
-      return res.status(200).json({
-        success: true,
-        data: JSON.parse(cachedData),
-        cached: true,
-      });
-    }
+    // //  Try getting cached result
+    // // const cachedData = await redisClient.get(cacheKey);
+    // if (cachedData) {
+    //   return res.status(200).json({
+    //     success: true,
+    //     data: JSON.parse(cachedData),
+    //     cached: true,
+    //   });
+    // }
 
     //  If not cached, fetch from MongoDB
     const searchRegex = new RegExp(mainSearch, "i");
@@ -209,7 +208,7 @@ export const searchByLocation = async (
     });
 
     //  Save to Redis with 1 hour expiration
-    await redisClient.set(cacheKey, JSON.stringify(restaurants), { EX: 3600 });
+    // await redisClient.set(cacheKey, JSON.stringify(restaurants), { EX: 3600 });
 
     return res.status(200).json({
       success: true,
@@ -261,17 +260,17 @@ export const searchByCityOrRestaurantName = async (
       return res.status(400).json({ message: "searchQuery is required" });
     }
 
-    const cacheKey = `cityOrRestaurantName_search:${searchQuery.toLowerCase()}`;
+    // const cacheKey = `cityOrRestaurantName_search:${searchQuery.toLowerCase()}`;
 
-    const cachedData = await redisClient.get(cacheKey);
+    // const cachedData = await redisClient.get(cacheKey);
 
-    if (cachedData) {
-      return res.status(200).json({
-        success: true,
-        data: JSON.parse(cachedData),
-        cached: true,
-      });
-    }
+    // if (cachedData) {
+    //   return res.status(200).json({
+    //     success: true,
+    //     data: JSON.parse(cachedData),
+    //     cached: true,
+    //   });
+    // }
 
     const searchRegex = new RegExp(searchQuery, "i"); // Case-insensitive search
 
@@ -285,7 +284,7 @@ export const searchByCityOrRestaurantName = async (
     });
 
     // /  Save to Redis with 1 hour expiration
-    await redisClient.set(cacheKey, JSON.stringify(restaurants), { EX: 3600 });
+    // await redisClient.set(cacheKey, JSON.stringify(restaurants), { EX: 3600 });
 
     return res.status(200).json({
       success: true,
