@@ -23,9 +23,6 @@ const ViewMenu = () => {
 
   const navigate = useNavigate();
 
-  console.log(params.id);
-  console.log("single Restaurent", singleResturent);
-
   if (loading) {
     return (
       <div className="flex min-h-[400px] flex-col items-center justify-center p-4">

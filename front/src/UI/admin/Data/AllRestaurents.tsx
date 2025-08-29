@@ -1,3 +1,5 @@
+// app/components/SingleRestaurantTable.tsx
+
 "use client";
 
 import {
@@ -8,55 +10,40 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-interface Restaurant {
-  id: number;
-  resturentName: string;
-  city: string;
-  country: string;
-  deliveryTime: number;
-  deliveryPrice: number;
-  cusines: string[];
-  image: string;
-}
-
-const mockRestaurants: Restaurant[] = [
-  {
-    id: 1,
-    resturentName: "La Bella Italia",
-    city: "Rome",
-    country: "Italy",
-    deliveryTime: 30,
-    deliveryPrice: 200,
-    cusines: ["Italian"],
-    image:
-      "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?w=600&q=80",
-  },
-  {
-    id: 2,
-    resturentName: "Dragon Palace",
-    city: "Beijing",
-    country: "China",
-    deliveryTime: 40,
-    deliveryPrice: 150,
-    cusines: ["Chinese"],
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzmnuNE7Vg8_evlj5T85CKWArPluVly20wLw&s",
-  },
-  {
-    id: 3,
-    resturentName: "Spice Hub",
-    city: "Delhi",
-    country: "India",
-    deliveryTime: 35,
-    deliveryPrice: 120,
-    cusines: ["Indian"],
-    image:
-      "https://hips.hearstapps.com/hmg-prod/images/dsc01939-1638289406.jpg",
-  },
-];
+import useResturent from "@/store/UseResturent";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 export default function RestaurantTable() {
+  const params = useParams();
+  // const navigate = useNavigate();
+
+  const { singleResturent, getSingleRestaurent, loading } = useResturent();
+
+  useEffect(() => {
+    const paramsId = params.id!;
+    getSingleRestaurent(paramsId);
+  }, [getSingleRestaurent, params.id]);
+
+  console.log("Single Restaurant:", singleResturent);
+  console.log("params:", params.id);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-[200px] items-center justify-center">
+        <p className="text-lg font-semibold">Loading Restaurant...</p>
+      </div>
+    );
+  }
+
+  if (!singleResturent) {
+    return (
+      <div className="flex min-h-[200px] items-center justify-center">
+        <p className="text-lg text-gray-500">No restaurant found</p>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 bg-white rounded-2xl shadow-md">
       <Table>
@@ -73,24 +60,22 @@ export default function RestaurantTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {mockRestaurants.map((resturent) => (
-            <TableRow key={resturent.id}>
-              <TableCell>
-                <img
-                  src={resturent.image}
-                  alt={resturent.resturentName}
-                  className="rounded-2xl w-16 h-16 object-cover"
-                />
-              </TableCell>
-              <TableCell>{resturent.id}</TableCell>
-              <TableCell>{resturent.resturentName}</TableCell>
-              <TableCell>{resturent.city}</TableCell>
-              <TableCell>{resturent.country}</TableCell>
-              <TableCell>{resturent.deliveryTime} min</TableCell>
-              <TableCell>${resturent.deliveryPrice}</TableCell>
-              <TableCell>{resturent.cusines.join(", ")}</TableCell>
-            </TableRow>
-          ))}
+          <TableRow>
+            <TableCell>
+              <img
+                src={singleResturent?.imageFile || ""}
+                alt={singleResturent?.resturentName}
+                className="rounded-2xl w-16 h-16 object-cover"
+              />
+            </TableCell>
+            <TableCell>{singleResturent?.id}</TableCell>
+            <TableCell>{singleResturent?.resturentName}</TableCell>
+            <TableCell>{singleResturent?.city}</TableCell>
+            <TableCell>{singleResturent?.country}</TableCell>
+            <TableCell>{singleResturent?.deliveryTime} min</TableCell>
+            <TableCell>${singleResturent?.deliveryPrice}</TableCell>
+            <TableCell>{singleResturent?.cusines.join(", ")}</TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </div>

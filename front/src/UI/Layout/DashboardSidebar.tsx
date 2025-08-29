@@ -1,108 +1,51 @@
-"use client";
-
-import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { NavLink } from "react-router-dom";
+import { Home, Users, ShoppingBasket, Store } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Home,
-  Users,
-  ShoppingBasket,
-  Store,
-} from "lucide-react";
-import SidebarToggle from "./SidebarToggle";
+import useResturent from "@/store/UseResturent";
 
-interface SidebarProps {
-  userRole: string;
-  currentPath: string;
-  onNavigate: (path: string) => void;
-}
-
-export function DashboardSidebar({ currentPath, onNavigate }: SidebarProps) {
-  const [collapsed, setCollapsed] = useState(false);
+export function DashboardSidebar() {
+  const { resturent } = useResturent();
 
   const adminMenuItems = [
+    { key: "/", icon: Home, label: "Home", path: "/admin" },
+    { key: "/admin/users", icon: Users, label: "Users", path: "/admin/users" },
     {
-      key: "/",
-      icon: Home,
-      label: "Home",
-      path: "/",
-    },
-    {
-      key: "/users",
-      icon: Users,
-      label: "Users",
-      path: "/users",
-    },
-    {
-      key: "/restaurant",
+      key: `/admin/resturent/${resturent?._id}`,
       icon: Store,
       label: "My Restaurant",
-      path: "/restaurants",
+      path: `/admin/resturent/${resturent?._id}`,
     },
+    { key: "/admin/menus", icon: Store, label: "Menus", path: "/admin/menus" },
     {
-      key: "/menus",
-      icon: Store,
-      label: "Menus",
-      path: "/menus",
-    }, 
-    {
-      key: "/orders",
+      key: "/admin/orders",
       icon: ShoppingBasket,
       label: "Orders",
-      path: "/orders",
+      path: "/admin/orders",
     },
   ];
 
-  const menuItems = adminMenuItems;
-
   return (
-    <div
-      className={cn(
-        "relative flex flex-col h-full bg-sidebar border-r border-sidebar-border transition-all duration-300",
-        collapsed ? "w-16" : "w-64"
-      )}>
-      <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
-        <SidebarToggle collapsed={collapsed} setCollapsed={setCollapsed} />
-      </div>
-
-      {/* Navigation Menu */}
+    <div className="w-64 border-r bg-sidebar">
       <ScrollArea className="flex-1 px-3 py-4">
         <nav className="space-y-2">
-          {menuItems.map((item) => {
+          {adminMenuItems.map((item) => {
             const Icon = item.icon;
-            const isActive = currentPath === item.path;
-
             return (
-              <Button
-                key={item.key}
-                variant={isActive ? "default" : "ghost"}
-                className={cn(
-                  "w-full justify-start h-11 px-3",
-                  isActive
-                    ? "bg-foodpanda-pink text-black hover:bg-foodpanda-pink-dark"
-                    : "hover:bg-sidebar-accent text-sidebar-foreground",
-                  collapsed && "px-2"
+              <NavLink key={item.key} to={item.path}>
+                {({ isActive }) => (
+                  <Button
+                    variant={isActive ? "default" : "ghost"}
+                    className="w-full justify-start h-11 px-3">
+                    <Icon className="h-5 w-5 mr-3" />
+                    <span className="text-sm font-medium">{item.label}</span>
+                  </Button>
                 )}
-                onClick={() => onNavigate(item.path)}>
-                <Icon className={cn("h-5 w-5", !collapsed && "mr-3")} />
-                {!collapsed && (
-                  <span className="text-sm font-medium">{item.label}</span>
-                )}
-              </Button>
+              </NavLink>
             );
           })}
         </nav>
       </ScrollArea>
-
-      {/* Footer */}
-      {!collapsed && (
-        <div className="p-4 border-t border-sidebar-border">
-          <div className="text-xs text-muted-foreground text-center">
-            FoodPanda Dashboard v2.0
-          </div>
-        </div>
-      )}
     </div>
   );
 }

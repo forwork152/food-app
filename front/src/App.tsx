@@ -26,6 +26,8 @@ import Auth from "./UI/pages/Auth";
 
 import Loading from "./UI/pages/utils/Loading";
 import Dashboard from "./UI/Layout/Dashboard";
+import RestaurantTable from "./UI/admin/Data/AllRestaurents";
+import AllUsers from "./UI/admin/Data/AllUsers";
 
 function App() {
   const API_URL = import.meta.env.VITE_BACKEND_URL;
@@ -154,6 +156,31 @@ function App() {
             </AdminRoute>
           ),
         },
+        {
+          path: "/admin/resturent/:id",
+          element: (
+            <AdminRoute>
+              <RestaurantTable />
+            </AdminRoute>
+          ),
+        },
+
+        {
+          path: "/admin",
+          element: (
+            <AdminRoute>
+              <Dashboard />
+            </AdminRoute>
+          ),
+          children: [
+            { index: true, element: <h1>Welcome Dashboard</h1> }, // default content
+            { path: "users", element: <AllUsers /> },
+            { path: "resturent/:id", element: <RestaurantTable /> }, // ✅ now param works
+            { path: "menus", element: <h1>Menus page</h1> },
+            { path: "orders", element: <h1>Orders page</h1> },
+          ],
+        },
+
         {
           path: "/admin/add-resturents",
           element: (

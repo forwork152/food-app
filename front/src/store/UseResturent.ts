@@ -90,6 +90,24 @@ const useResturent = create<ResturentTypes>()(
           set({ loading: false });
         }
       },
+      getSingleRestaurent: async (id: string) => {
+        try {
+          set({ loading: true });
+          const res = await axios.get(`${API_ENDPOINT}/resturents/${id}`);
+          if (res.data.success && res.data.resturent) {
+            set({ resturent: res.data.resturent });
+          } else {
+            set({ resturent: null });
+          }
+        } catch (error: any) {
+          set({ resturent: null });
+          toast.error(
+            error.response?.data?.message || "Error fetching restaurant"
+          );
+        } finally {
+          set({ loading: false });
+        }
+      },
 
       // Update Restaurant
       updateResturent: async (formdata: FormData) => {
@@ -130,8 +148,6 @@ const useResturent = create<ResturentTypes>()(
           set({ loading: false });
         }
       },
-
-      
 
       // Menus Related
 
