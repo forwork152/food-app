@@ -25,6 +25,7 @@ import CaptainLogin from "./UI/auth/admin/CaptainLogin";
 import Auth from "./UI/pages/Auth";
 
 import Loading from "./UI/pages/utils/Loading";
+import Dashboard from "./UI/Layout/Dashboard";
 
 function App() {
   const API_URL = import.meta.env.VITE_BACKEND_URL;
@@ -145,6 +146,14 @@ function App() {
         },
 
         // Admin
+        {
+          path: "/admin",
+          element: (
+            <AdminRoute>
+              <Dashboard />
+            </AdminRoute>
+          ),
+        },
         {
           path: "/admin/add-resturents",
           element: (

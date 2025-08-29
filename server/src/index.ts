@@ -7,7 +7,6 @@ import cookieParser from "cookie-parser";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@as-integrations/express4";
 import { createClient } from "redis";
-
 import connectDB from "./utils/DB";
 import userRoute from "./routes/UserRoute";
 import { resturentRoute } from "./routes/ResturentRoutes";
