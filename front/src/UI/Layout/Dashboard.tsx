@@ -23,7 +23,7 @@ export default function Dashboard() {
         <DashboardHeader user={mockUser} onLogout={handleLogout} />
 
         <main className="flex-1 overflow-y-auto p-6">
-          <Outlet /> {/* ✅ renders child routes */}
+          <Outlet />
         </main>
 
         <footer className="border-t border-border px-6 py-4 bg-card">

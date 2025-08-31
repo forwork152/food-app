@@ -148,22 +148,6 @@ function App() {
         },
 
         // Admin
-        {
-          path: "/admin",
-          element: (
-            <AdminRoute>
-              <Dashboard />
-            </AdminRoute>
-          ),
-        },
-        {
-          path: "/admin/resturent/:id",
-          element: (
-            <AdminRoute>
-              <RestaurantTable />
-            </AdminRoute>
-          ),
-        },
 
         {
           path: "/admin",

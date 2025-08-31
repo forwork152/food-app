@@ -13,13 +13,14 @@ import {
 import useResturent from "@/store/UseResturent";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 export default function RestaurantTable() {
   const params = useParams();
   // const navigate = useNavigate();
 
   const { singleResturent, getSingleRestaurent, loading } = useResturent();
-
   useEffect(() => {
     const paramsId = params.id!;
     getSingleRestaurent(paramsId);
@@ -45,22 +46,41 @@ export default function RestaurantTable() {
   }
 
   return (
-    <div className="p-6 bg-white rounded-2xl shadow-md">
+    <div className="p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-md">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Image</TableHead>
-            <TableHead>ID</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>City</TableHead>
-            <TableHead>Country</TableHead>
-            <TableHead>Delivery Time</TableHead>
-            <TableHead>Delivery Price</TableHead>
-            <TableHead>Cuisines</TableHead>
+            <TableHead className="text-gray-700 dark:text-gray-200">
+              Image
+            </TableHead>
+            <TableHead className="text-gray-700 dark:text-gray-200">
+              ID
+            </TableHead>
+            <TableHead className="text-gray-700 dark:text-gray-200">
+              Name
+            </TableHead>
+            <TableHead className="text-gray-700 dark:text-gray-200">
+              City
+            </TableHead>
+            <TableHead className="text-gray-700 dark:text-gray-200">
+              Country
+            </TableHead>
+            <TableHead className="text-gray-700 dark:text-gray-200">
+              Delivery Time
+            </TableHead>
+            <TableHead className="text-gray-700 dark:text-gray-200">
+              Delivery Price
+            </TableHead>
+            <TableHead className="text-gray-700 dark:text-gray-200">
+              Cuisines
+            </TableHead>
+            <TableHead className="text-gray-700 dark:text-gray-200">
+              Action
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow>
+          <TableRow className="hover:bg-gray-100 dark:hover:bg-gray-800">
             <TableCell>
               <img
                 src={singleResturent?.imageFile || ""}
@@ -68,13 +88,35 @@ export default function RestaurantTable() {
                 className="rounded-2xl w-16 h-16 object-cover"
               />
             </TableCell>
-            <TableCell>{singleResturent?.id}</TableCell>
-            <TableCell>{singleResturent?.resturentName}</TableCell>
-            <TableCell>{singleResturent?.city}</TableCell>
-            <TableCell>{singleResturent?.country}</TableCell>
-            <TableCell>{singleResturent?.deliveryTime} min</TableCell>
-            <TableCell>${singleResturent?.deliveryPrice}</TableCell>
-            <TableCell>{singleResturent?.cusines.join(", ")}</TableCell>
+            <TableCell className="text-gray-800 dark:text-gray-100">
+              {singleResturent?.id}
+            </TableCell>
+            <TableCell className="text-gray-800 dark:text-gray-100">
+              {singleResturent?.resturentName}
+            </TableCell>
+            <TableCell className="text-gray-800 dark:text-gray-100">
+              {singleResturent?.city}
+            </TableCell>
+            <TableCell className="text-gray-800 dark:text-gray-100">
+              {singleResturent?.country}
+            </TableCell>
+            <TableCell className="text-gray-800 dark:text-gray-100">
+              {singleResturent?.deliveryTime} min
+            </TableCell>
+            <TableCell className="text-gray-800 dark:text-gray-100">
+              ${singleResturent?.deliveryPrice}
+            </TableCell>
+            <TableCell className="text-gray-800 dark:text-gray-100">
+              {singleResturent?.cusines.join(", ")}
+            </TableCell>
+            <TableCell className="text-gray-800 dark:text-gray-100 flex justify-start gap-3 items-center mt-3">
+              <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
+                <FaEdit />
+              </button>
+              <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">
+                <MdDelete />
+              </button>
+            </TableCell>
           </TableRow>
         </TableBody>
       </Table>

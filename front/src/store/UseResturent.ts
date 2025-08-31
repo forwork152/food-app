@@ -95,7 +95,9 @@ const useResturent = create<ResturentTypes>()(
           set({ loading: true });
           const res = await axios.get(`${API_ENDPOINT}/resturents/${id}`);
           if (res.data.success && res.data.resturent) {
-            set({ resturent: res.data.resturent });
+            console.log(res.data.resturent);
+
+            set({ singleResturent: res.data.resturent });
           } else {
             set({ resturent: null });
           }
