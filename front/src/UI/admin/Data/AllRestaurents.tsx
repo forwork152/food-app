@@ -26,9 +26,6 @@ export default function RestaurantTable() {
     getSingleRestaurent(paramsId);
   }, [getSingleRestaurent, params.id]);
 
-  console.log("Single Restaurant:", singleResturent);
-  console.log("params:", params.id);
-
   if (loading) {
     return (
       <div className="flex min-h-[200px] items-center justify-center">

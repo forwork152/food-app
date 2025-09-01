@@ -161,7 +161,7 @@ function App() {
             { path: "users", element: <AllUsers /> },
             { path: "resturent/:id", element: <RestaurantTable /> }, // ✅ now param works
             { path: "add-resturents", element: <AddResturents /> }, // ✅ now param works
-            { path: "menus", element: <h1>Menus page</h1> },
+            { path: "add-menu", element: <AddMenu /> },
             { path: "orders", element: <h1>Orders page</h1> },
           ],
         },
@@ -174,14 +174,7 @@ function App() {
         //     </AdminRoute>
         //   ),
         // },
-        {
-          path: "/admin/add-menu",
-          element: (
-            <AdminRoute>
-              <AddMenu />
-            </AdminRoute>
-          ),
-        },
+
         {
           path: "/admin/order",
           element: (
