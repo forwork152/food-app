@@ -39,7 +39,7 @@ export type UserState = {
   loading: boolean;
   user: User | null;
   isCheckAuth: boolean;
-  allUsers: User[];
+  allUsers: User[] | null;
   isAdmin: boolean;
   signup: (input: signupInpt) => Promise<boolean | void>;
   login: (input: loginInpt) => Promise<boolean | void>;
@@ -48,6 +48,7 @@ export type UserState = {
   logout: () => Promise<void>;
   verifyOtp: (otp: string) => Promise<void>;
   CheckingAuth: () => Promise<void>;
+  Getusers: () => Promise<void>;
   forgetPassword: (
     email: string,
     fullname: string,

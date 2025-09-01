@@ -72,7 +72,6 @@ export const UserStore = create<UserState>()(
             set({
               user: response.data.user,
               loading: false,
-              allUsers: response.data.users,
             });
           }
           return true;
@@ -86,19 +85,17 @@ export const UserStore = create<UserState>()(
       Getusers: async () => {
         try {
           set({ loading: true });
-          const response = await axios.post(`${API_ENDPOINT}/all-users`);
+          const response = await axios.get(`${API_ENDPOINT}/all-users`);
           if (response.data.success) {
             set({
-              user: response.data.users,
+              allUsers: response.data.users,
               loading: false,
             });
           }
-          return true;
         } catch (error: unknown) {
           const err = error as AxiosError<{ message: string }>;
           set({ loading: false });
           toast.error(err.response?.data?.message || "An error occurred");
-          toast.error(err.message);
         }
       },
 

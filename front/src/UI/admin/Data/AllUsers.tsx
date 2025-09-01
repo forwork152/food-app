@@ -1,5 +1,6 @@
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useEffect, useRef } from "react";
 
 import {
   Table,
@@ -10,54 +11,29 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card } from "@/components/ui/card";
-import UsersFilter from "./UserFilter";
+import { UserStore } from "@/store/UserStroe";
+import { User } from "@/types/UserTypes";
 
 // const PER_PAGE = 10;
 
 const AllUsers = () => {
+  const { Getusers, allUsers, loading } = UserStore();
+  const hasFetched = useRef(false);
+
+  useEffect(() => {
+    if (
+      !hasFetched.current &&
+      !loading &&
+      (!allUsers || allUsers.length === 0)
+    ) {
+      hasFetched.current = true;
+      Getusers();
+    }
+  }, []);
+
+  console.log("allUsers", allUsers);
+
   // Mock data - replace with actual API call later
-  const mockUsers = [
-    {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
-      email: "john@example.com",
-      role: "admin",
-      tenant: { name: "Pizza Palace" },
-    },
-    {
-      id: 2,
-      firstName: "Jane",
-      lastName: "Smith",
-      email: "jane@example.com",
-      role: "manager",
-      tenant: { name: "Burger House" },
-    },
-    {
-      id: 3,
-      firstName: "Mike",
-      lastName: "Johnson",
-      email: "mike@example.com",
-      role: "customer",
-      tenant: null,
-    },
-    {
-      id: 4,
-      firstName: "Sarah",
-      lastName: "Wilson",
-      email: "sarah@example.com",
-      role: "admin",
-      tenant: { name: "Taco Bell" },
-    },
-    {
-      id: 5,
-      firstName: "Tom",
-      lastName: "Brown",
-      email: "tom@example.com",
-      role: "customer",
-      tenant: null,
-    },
-  ];
 
   return (
     <div className="space-y-6">
@@ -68,7 +44,7 @@ const AllUsers = () => {
         <ChevronRight className="h-4 w-4" />
         <span>Users</span>
       </nav>
-      <UsersFilter />
+      {/* <UsersFilter /> */}
       <Card>
         <Table>
           <TableHeader>
@@ -77,19 +53,15 @@ const AllUsers = () => {
               <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Role</TableHead>
-              <TableHead>Restaurant</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {mockUsers.map((user: any) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.id}</TableCell>
-                <TableCell>
-                  {user.firstName} {user.lastName}
-                </TableCell>
+            {allUsers?.map((user: User, indx) => (
+              <TableRow key={user._id}>
+                <TableCell>{indx + 1}</TableCell>
+                <TableCell>{user.fullname}</TableCell>
                 <TableCell>{user.email}</TableCell>
-                <TableCell>{user.role}</TableCell>
-                <TableCell>{user.tenant?.name}</TableCell>
+                <TableCell>{user.isAdmin ? "Admin" : "User"}</TableCell>
               </TableRow>
             ))}
           </TableBody>
