@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import useResturent from "@/store/UseResturent";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 
@@ -110,9 +110,11 @@ export default function RestaurantTable() {
               {singleResturent?.cusines.join(", ")}
             </TableCell>
             <TableCell className="text-gray-800 dark:text-gray-100 flex justify-start gap-3 items-center mt-3">
-              <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
-                <FaEdit />
-              </button>
+              <Link to={"/admin/add-resturents"}>
+                <button className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
+                  <FaEdit />
+                </button>
+              </Link>
               <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">
                 <MdDelete />
               </button>

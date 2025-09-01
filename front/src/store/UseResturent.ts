@@ -97,7 +97,10 @@ const useResturent = create<ResturentTypes>()(
           if (res.data.success && res.data.resturent) {
             console.log(res.data.resturent);
 
-            set({ singleResturent: res.data.resturent });
+            set({
+              singleResturent: res.data.resturent,
+              resturent: res.data.resturent,
+            });
           } else {
             set({ resturent: null });
           }

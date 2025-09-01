@@ -11,9 +11,10 @@ const AddResturents = () => {
   const {
     loading,
     createResturents,
-    resturent,
+    getSingleRestaurent,
     updateResturent,
     getResturent,
+    singleResturent,
   } = useResturent();
   const [Error, setError] = useState<Partial<ResturentTypes>>({});
 
@@ -57,7 +58,7 @@ const AddResturents = () => {
         formdata.append("image", ResturentForm.image);
       }
 
-      if (!resturent) {
+      if (!singleResturent) {
         await createResturents(formdata);
       } else {
         await updateResturent(formdata);
@@ -85,35 +86,35 @@ const AddResturents = () => {
     fetchData();
   }, []);
 
-  console.log("restaurent :", resturent);
+  console.log("single restaurent :", singleResturent);
 
   useEffect(() => {
-    if (resturent) {
+    if (singleResturent) {
       setResturentForm({
-        resturentName: resturent.resturentName || "",
-        city: resturent.city || "",
-        country: resturent.country || "",
-        deliveryTime: resturent.deliveryTime || 10,
-        deliveryPrice: resturent.deliveryPrice || 100,
-        cusines: resturent.cusines || [],
+        resturentName: singleResturent.resturentName || "",
+        city: singleResturent.city || "",
+        country: singleResturent.country || "",
+        deliveryTime: singleResturent.deliveryTime || 10,
+        deliveryPrice: singleResturent.deliveryPrice || 100,
+        cusines: singleResturent.cusines || [],
         image: undefined,
       });
     }
-  }, [resturent]); // Only trigger fetch when `getResturent` changes
+  }, [singleResturent]); // Only trigger fetch when `getResturent` changes
 
   useEffect(() => {
-    if (resturent) {
+    if (singleResturent) {
       setResturentForm({
-        resturentName: resturent.resturentName || "",
-        city: resturent.city || "",
-        country: resturent.country || "",
-        deliveryTime: resturent.deliveryTime || 10,
-        deliveryPrice: resturent.deliveryPrice || 100,
-        cusines: resturent.cusines || [],
+        resturentName: singleResturent.resturentName || "",
+        city: singleResturent.city || "",
+        country: singleResturent.country || "",
+        deliveryTime: singleResturent.deliveryTime || 10,
+        deliveryPrice: singleResturent.deliveryPrice || 100,
+        cusines: singleResturent.cusines || [],
         image: undefined, // Keep image upload empty
       });
     }
-  }, [resturent]);
+  }, [getSingleRestaurent]);
 
   return (
     <div className="min-h-screen bg-gray-100 dark:from-gray-900 dark:to-black">
@@ -292,7 +293,7 @@ const AddResturents = () => {
                 </span>
               )}
 
-              {resturent ? (
+              {singleResturent ? (
                 loading ? (
                   <button className="bg-[#FF2B85] flex items-center justify-center text-white font-bold py-2 px-4 w-full rounded hover:bg-[#ff88ba]">
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}

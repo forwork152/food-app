@@ -160,19 +160,20 @@ function App() {
             { index: true, element: <h1>Welcome Dashboard</h1> }, // default content
             { path: "users", element: <AllUsers /> },
             { path: "resturent/:id", element: <RestaurantTable /> }, // ✅ now param works
+            { path: "add-resturents", element: <AddResturents /> }, // ✅ now param works
             { path: "menus", element: <h1>Menus page</h1> },
             { path: "orders", element: <h1>Orders page</h1> },
           ],
         },
 
-        {
-          path: "/admin/add-resturents",
-          element: (
-            <AdminRoute>
-              <AddResturents />
-            </AdminRoute>
-          ),
-        },
+        // {
+        //   path: "/admin/add-resturents",
+        //   element: (
+        //     <AdminRoute>
+        //       <AddResturents />
+        //     </AdminRoute>
+        //   ),
+        // },
         {
           path: "/admin/add-menu",
           element: (
