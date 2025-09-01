@@ -146,7 +146,10 @@ export const UpdateProfile = async (
   }
 };
 
-export const GetAllUsers = async (req: Request, res: Response) => {
+export const GetAllUsers = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
   try {
     const users = await UserModel.find().select("-password");
     return res.status(200).json({ users, success: true });

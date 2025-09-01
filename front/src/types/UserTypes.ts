@@ -39,6 +39,7 @@ export type UserState = {
   loading: boolean;
   user: User | null;
   isCheckAuth: boolean;
+  allUsers: User[];
   isAdmin: boolean;
   signup: (input: signupInpt) => Promise<boolean | void>;
   login: (input: loginInpt) => Promise<boolean | void>;

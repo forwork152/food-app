@@ -1,7 +1,7 @@
 "use client";
 
 import { Bell } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -55,8 +55,9 @@ export function DashboardHeader() {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-              <Avatar className="h-10 w-10 border-2 border-foodpanda-pink/20">
-                <AvatarFallback className="bg-foodpanda-pink text-white font-semibold">
+              <Avatar className="md:w-20 md:h-20 relative w-16 h-16 bg-gray-200">
+                <AvatarImage src={user?.profilePicture} />
+                <AvatarFallback>
                   {user?.fullname.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>

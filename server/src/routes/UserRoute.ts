@@ -5,6 +5,7 @@ import {
   CaptainRegister,
   CheckAuth,
   forgotPassword,
+  GetAllUsers,
   logout,
   UpdateProfile,
   UserLogin,
@@ -25,6 +26,7 @@ userRoute.route("/regester").post(registerValidator, UserRegister);
 userRoute.route("/login").post(loginValidator, UserLogin);
 userRoute.route("/logout").post(logout);
 userRoute.route("/forgot-password").post(forgotPassword);
+userRoute.route("/all-users").get(IsAuthenticated, GetAllUsers);
 userRoute.route("/profile/update").put(
   IsAuthenticated, // Handle single file upload
   UpdateProfile

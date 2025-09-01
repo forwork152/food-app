@@ -3,11 +3,9 @@ import {
   HandPlatter,
   Loader2,
   MenuIcon,
-  Moon,
   PackageCheck,
   ShoppingCart,
   SquareMenu,
-  Sun,
   User,
   UtensilsCrossed,
 } from "lucide-react";
@@ -34,7 +32,6 @@ import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserStore } from "@/store/UserStroe";
 import UseCartStore from "@/store/UseCartStore";
-import { useThemeStore } from "@/store/UseThemeStore";
 import useResturent from "@/store/UseResturent";
 import { useEffect } from "react";
 import ThemeToggleButton from "./utils/ThemeToggle";
@@ -42,7 +39,6 @@ import ThemeToggleButton from "./utils/ThemeToggle";
 const Navbar = () => {
   const { isAuthentiacte, user, loading, logout, isAdmin } = UserStore();
   const { cart } = UseCartStore();
-  const { setTheme } = useThemeStore();
   const { resturent, getResturent } = useResturent();
 
   useEffect(() => {

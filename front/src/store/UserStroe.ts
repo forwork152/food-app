@@ -11,10 +11,10 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 axios.defaults.withCredentials = true;
-axios.defaults.headers.common['Content-Type'] = 'application/json';
+axios.defaults.headers.common["Content-Type"] = "application/json";
 // If you're using tokens in Authorization header:
 axios.interceptors.request.use(function (config) {
-  const token = localStorage.getItem('token'); // or however you store your token
+  const token = localStorage.getItem("token"); // or however you store your token
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -31,6 +31,7 @@ export const UserStore = create<UserState>()(
       user: null,
       isAdmin: false,
       isCheckAuth: true,
+      allUsers: [],
 
       //   Methods
       signup: async (input: signupInpt) => {
@@ -71,7 +72,25 @@ export const UserStore = create<UserState>()(
             set({
               user: response.data.user,
               loading: false,
-              isAuthentiacte: true,
+              allUsers: response.data.users,
+            });
+          }
+          return true;
+        } catch (error: unknown) {
+          const err = error as AxiosError<{ message: string }>;
+          set({ loading: false });
+          toast.error(err.response?.data?.message || "An error occurred");
+          toast.error(err.message);
+        }
+      },
+      Getusers: async () => {
+        try {
+          set({ loading: true });
+          const response = await axios.post(`${API_ENDPOINT}/all-users`);
+          if (response.data.success) {
+            set({
+              user: response.data.users,
+              loading: false,
             });
           }
           return true;
