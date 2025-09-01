@@ -24,7 +24,7 @@ export function DashboardHeader() {
     <header className="flex items-center justify-between px-6 py-4 bg-card border-b border-border">
       {/* Left Section - Search */}
       <div className="flex items-center justify-center w-full py-4 px-6 bg-white shadow-sm rounded-2xl dark:bg-gray-900 dark:shadow-md">
-        <div className="relative flex-1 text-center">
+        <div className="relative flex-1 text-start">
           <h1 className="text-3xl font-extrabold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent truncate dark:from-blue-400 dark:via-purple-400 dark:to-pink-400">
             Mrs. {user?.fullname}
           </h1>
