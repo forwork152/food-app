@@ -28,6 +28,7 @@ import Loading from "./UI/pages/utils/Loading";
 import Dashboard from "./UI/Layout/Dashboard";
 import RestaurantTable from "./UI/admin/Data/AllRestaurents";
 import AllUsers from "./UI/admin/Data/AllUsers";
+import FoodPandaDashboard from "./UI/admin/DashboardHome";
 
 function App() {
   const API_URL = import.meta.env.VITE_BACKEND_URL;
@@ -157,7 +158,7 @@ function App() {
             </AdminRoute>
           ),
           children: [
-            { index: true, element: <h1>Welcome Dashboard</h1> }, // default content
+            { index: true, element: <FoodPandaDashboard /> }, // default content
             { path: "users", element: <AllUsers /> },
             { path: "resturent/:id", element: <RestaurantTable /> },
             { path: "add-resturents", element: <AddResturents /> },
