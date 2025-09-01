@@ -1,9 +1,8 @@
 "use client";
 
-import { Bell, Search } from "lucide-react";
+import { Bell } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
@@ -12,26 +11,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { UserStore } from "@/store/UserStroe";
+import { Link } from "react-router-dom";
 
-interface DashboardHeaderProps {
-  user: {
-    firstName: string;
-    role: string;
+export function DashboardHeader() {
+  const { user, logout } = UserStore();
+
+  const handleLogout = async () => {
+    await logout();
   };
-  onLogout: () => void;
-}
-
-export function DashboardHeader({ user, onLogout }: DashboardHeaderProps) {
   return (
     <header className="flex items-center justify-between px-6 py-4 bg-card border-b border-border">
       {/* Left Section - Search */}
-      <div className="flex items-center space-x-4 flex-1 max-w-md">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search products, restaurants..."
-            className="pl-10 bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-foodpanda-pink"
-          />
+      <div className="flex items-center justify-center w-full py-4 px-6 bg-white shadow-sm rounded-2xl dark:bg-gray-900 dark:shadow-md">
+        <div className="relative flex-1 text-center">
+          <h1 className="text-3xl font-extrabold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent truncate dark:from-blue-400 dark:via-purple-400 dark:to-pink-400">
+            Mrs. {user?.fullname}
+          </h1>
         </div>
       </div>
 
@@ -61,7 +57,7 @@ export function DashboardHeader({ user, onLogout }: DashboardHeaderProps) {
             <Button variant="ghost" className="relative h-10 w-10 rounded-full">
               <Avatar className="h-10 w-10 border-2 border-foodpanda-pink/20">
                 <AvatarFallback className="bg-foodpanda-pink text-white font-semibold">
-                  {user.firstName.charAt(0).toUpperCase()} || A
+                  {user?.fullname.charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             </Button>
@@ -69,20 +65,22 @@ export function DashboardHeader({ user, onLogout }: DashboardHeaderProps) {
           <DropdownMenuContent className="w-56" align="end" forceMount>
             <div className="flex flex-col space-y-1 p-2">
               <p className="text-sm font-medium leading-none">
-                {user.firstName}
+                {user?.fullname}
               </p>
               <p className="text-xs leading-none text-muted-foreground capitalize">
-                {user.role}
+                {user?.isAdmin ? "Admin" : "User"}
               </p>
             </div>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer">
-              Profile Settings
-            </DropdownMenuItem>
+            <Link to={"/profile"}>
+              <DropdownMenuItem className="cursor-pointer">
+                Profile Settings
+              </DropdownMenuItem>
+            </Link>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="cursor-pointer text-destructive focus:text-destructive"
-              onClick={onLogout}>
+              onClick={handleLogout}>
               Logout
             </DropdownMenuItem>
           </DropdownMenuContent>

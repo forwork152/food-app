@@ -159,29 +159,11 @@ function App() {
           children: [
             { index: true, element: <h1>Welcome Dashboard</h1> }, // default content
             { path: "users", element: <AllUsers /> },
-            { path: "resturent/:id", element: <RestaurantTable /> }, // ✅ now param works
-            { path: "add-resturents", element: <AddResturents /> }, // ✅ now param works
-            { path: "add-menu", element: <AddMenu /> },
-            { path: "orders", element: <h1>Orders page</h1> },
+            { path: "resturent/:id", element: <RestaurantTable /> },
+            { path: "add-resturents", element: <AddResturents /> },
+            { path: "menus", element: <AddMenu /> },
+            { path: "order", element: <AdminOrder /> },
           ],
-        },
-
-        // {
-        //   path: "/admin/add-resturents",
-        //   element: (
-        //     <AdminRoute>
-        //       <AddResturents />
-        //     </AdminRoute>
-        //   ),
-        // },
-
-        {
-          path: "/admin/order",
-          element: (
-            <AdminRoute>
-              <AdminOrder />
-            </AdminRoute>
-          ),
         },
       ],
     },

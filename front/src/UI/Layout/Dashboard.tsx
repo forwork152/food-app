@@ -2,17 +2,7 @@ import { DashboardSidebar } from "./DashboardSidebar";
 import { DashboardHeader } from "./DashboardHeader";
 import { Outlet } from "react-router-dom";
 
-const mockUser = {
-  firstName: "John",
-  role: "admin",
-  restaurantId: "123", // ✅ this should come from backend
-};
-
 export default function Dashboard() {
-  const handleLogout = () => {
-    console.log("Logging out...");
-  };
-
   return (
     <div className="flex h-screen bg-background">
       {/* Sidebar */}
@@ -20,7 +10,7 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        <DashboardHeader user={mockUser} onLogout={handleLogout} />
+        <DashboardHeader />
 
         <main className="flex-1 overflow-y-auto p-6">
           <Outlet />

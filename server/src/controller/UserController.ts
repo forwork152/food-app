@@ -146,6 +146,15 @@ export const UpdateProfile = async (
   }
 };
 
+export const GetAllUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await UserModel.find().select("-password");
+    return res.status(200).json({ users, success: true });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 //  Admin Authentication
 
 export const CaptainRegister = async (

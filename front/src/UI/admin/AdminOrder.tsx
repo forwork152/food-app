@@ -1,4 +1,4 @@
-import { Pizza, Search } from "lucide-react";
+import { Pizza } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -7,7 +7,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -50,13 +49,6 @@ const AdminOrder = () => {
           <CardTitle className="text-2xl font-bold">Order Management</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="mb-4">
-            <div className="relative">
-              <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Search orders..." className="pl-8" />
-            </div>
-          </div>
-
           <div className="rounded-md border dark:bg-gray-800 dark:border-gray-700 border-gray-200  dark:text-gray-100">
             <Table className="w-full text-left border  rounded dark:bg-gray-800 dark:border-gray-700 border-gray-200  dark:text-gray-100">
               <TableHeader className="bg-gray-100">

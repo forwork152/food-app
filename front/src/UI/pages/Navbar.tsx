@@ -37,6 +37,7 @@ import UseCartStore from "@/store/UseCartStore";
 import { useThemeStore } from "@/store/UseThemeStore";
 import useResturent from "@/store/UseResturent";
 import { useEffect } from "react";
+import ThemeToggleButton from "./utils/ThemeToggle";
 
 const Navbar = () => {
   const { isAuthentiacte, user, loading, logout, isAdmin } = UserStore();
@@ -150,24 +151,7 @@ const Navbar = () => {
             </div>
           )}
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                size="icon"
-                className="relative border border-gray-200 hover:border-gray-300 p-2 rounded-full shadow-md transition-transform transform hover:scale-105">
-                <Sun className="h-6 w-6 text-gray-700 dark:text-gray-300" />
-                <Moon className="h-6 w-6 text-gray-700 dark:text-gray-300 hidden" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setTheme("light")}>
-                Light
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("dark")}>
-                Dark
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <ThemeToggleButton />
           <Link to={"/cart-page"}>
             <Button
               size="icon"
