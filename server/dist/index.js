@@ -58,7 +58,7 @@ dotenv_1.default.config();
 (0, DB_1.default)();
 const startServer = () =>
   __awaiter(void 0, void 0, void 0, function* () {
-    const PORT = process.env.PORT || 5200;
+    const PORT = process.env.PORT || 5401;
     const app = (0, express_1.default)();
     // Middleware setup
     app.use(body_parser_1.default.json({ limit: "10mb" }));

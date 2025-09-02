@@ -20,7 +20,7 @@ dotenv.config();
 connectDB();
 
 const startServer = async () => {
-  const PORT = process.env.PORT || 5200;
+  const PORT = process.env.PORT || 5401;
   const app = express();
 
   // Middleware setup
