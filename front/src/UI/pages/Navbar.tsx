@@ -34,7 +34,7 @@ import ThemeToggleButton from "./utils/ThemeToggle";
 const Navbar = () => {
   const { isAuthentiacte, user, loading, logout, isAdmin } = UserStore();
   const { cart } = UseCartStore();
-  const { resturent, getResturent } = useResturent();
+  const { getResturent } = useResturent();
 
   useEffect(() => {
     if (isAdmin) {
@@ -132,15 +132,16 @@ const Navbar = () => {
               )}
             </Button>
           </Link>
-          {isAuthentiacte && (
+          {isAuthentiacte && !isAdmin && (
             <Link to={"/profile"}>
               <Avatar>
-                <AvatarImage src={user?.profilePicture} />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarImage src={user?.profilePicture || ""} />
+                <AvatarFallback>
+                  {user?.fullname?.charAt(0).toUpperCase() ?? "U"}
+                </AvatarFallback>
               </Avatar>
             </Link>
           )}
-
           {/* Mobile Responcsive */}
           <div className="md:hidden sm:visible">
             <MobileNav />
@@ -205,12 +206,14 @@ export const MobileNav = () => {
           <Separator className="my-5" />
         </SheetHeader>
         <SheetDescription className="flex-1">
-          <Link to={"/profile"}>
-            <div className="flex items-center gap-6 cursor-pointer p-2 text-gray-900 hover:bg-gray-300 hover:rounded-md duration-100">
-              <User />
-              <p>Proflie</p>
-            </div>
-          </Link>
+          {isAuthentiacte && !isAdmin && (
+            <Link to={"/profile"}>
+              <div className="flex items-center gap-6 cursor-pointer p-2 text-gray-900 hover:bg-gray-300 hover:rounded-md duration-100">
+                <User />
+                <p>Proflie</p>
+              </div>
+            </Link>
+          )}
           <Link
             to={"/order-status"}
             className="flex items-center gap-6 cursor-pointer p-2 text-gray-900 hover:bg-gray-300 hover:rounded-md duration-100">
