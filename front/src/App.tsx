@@ -52,11 +52,21 @@ function App() {
 
   // admin route
   const AdminRoute = ({ children }: { children: React.ReactNode }) => {
-    const { isAdmin, user } = UserStore();
-    if (!isAdmin || !user?.isAdmin) {
+    const { user, isAdmin, isCheckAuth } = UserStore();
+
+    if (isCheckAuth) {
+      return (
+        <div className="w-full flex items-center justify-center h-screen">
+          <Loading />
+        </div>
+      );
+    }
+
+    if (!user?.isAdmin || !isAdmin) {
       return <Navigate to="/" replace />;
     }
-    return children;
+
+    return <>{children}</>;
   };
 
   const appRouter = createBrowserRouter([
@@ -163,7 +173,7 @@ function App() {
             { path: "resturent/:id", element: <RestaurantTable /> },
             { path: "add-resturents", element: <AddResturents /> },
             { path: "menus", element: <AddMenu /> },
-            { path: "order", element: <AdminOrder /> },
+            { path: "orders", element: <AdminOrder /> },
           ],
         },
       ],

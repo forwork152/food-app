@@ -254,11 +254,10 @@ export const UserStore = create<UserState>()(
             `${API_ENDPOINT}/captain-login`,
             input,
             {
-              headers: {
-                "Content-Type": "application/json",
-              },
+              headers: { "Content-Type": "application/json" },
             }
           );
+
           if (response.data.success) {
             set({
               user: response.data.captain,
@@ -267,9 +266,10 @@ export const UserStore = create<UserState>()(
               isAuthentiacte: true,
               isCheckAuth: false,
             });
+            return response.data.captain;
           }
 
-          return true;
+          return null;
         } catch (error: unknown) {
           const err = error as AxiosError<{ message: string }>;
           set({ loading: false });

@@ -9,12 +9,7 @@ import {
   User,
   UtensilsCrossed,
 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { Link } from "react-router-dom";
 
 // Mobile sheet
@@ -88,38 +83,15 @@ const Navbar = () => {
                 Orders
               </Link>
               {isAdmin && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <button
-                      className="text-black mt-2 bg-white border border-gray-300
+                <Link to={"/admin"}>
+                  <button
+                    className="text-black mt-2 bg-white border border-gray-300
             focus:outline-none focus:ring-4 focus:ring-pink-300 md:font-medium font-normal
              rounded-xl md:text-sm text-[10px] md:px-5 px-3 md:py-2.5 py-2 text-center me-2 mb-2 dark:bg-pink-600
               dark:hover:bg-pink-700 dark:focus:ring-pink-800">
-                      Dashboard
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <Link to={"/admin/add-resturents"}>
-                      <DropdownMenuItem className="py-2 hover:bg-gray-200 cursor-pointer">
-                        Resturents
-                      </DropdownMenuItem>
-                    </Link>
-                    {resturent && (
-                      <>
-                        <Link to={"/admin/add-menu"}>
-                          <DropdownMenuItem className="py-2 hover:bg-gray-200 cursor-pointer">
-                            Menu
-                          </DropdownMenuItem>
-                        </Link>
-                        <Link to={"/admin/order"}>
-                          <DropdownMenuItem className="py-2 hover:bg-gray-200 cursor-pointer">
-                            Orders
-                          </DropdownMenuItem>
-                        </Link>
-                      </>
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                    Dashboard
+                  </button>
+                </Link>
               )}
             </div>
           ) : (

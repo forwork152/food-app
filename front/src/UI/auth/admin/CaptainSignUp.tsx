@@ -29,7 +29,7 @@ const CaptainSignUp = () => {
       const success = await CaptainSignupApi(input);
       if (success === true) {
         toast.success("Registered Successfully");
-        navigate("/admin", { replace: true });
+        navigate("/", { replace: true });
         setinput({
           fullname: "",
           email: "",
