@@ -50,6 +50,7 @@ exports.resturentRoute.post("/create-resturent", IsAuthenticated_1.IsAdmin, mult
 exports.resturentRoute.get("/get-resturent", IsAuthenticated_1.default, ResturentController_1.GetResturent);
 exports.resturentRoute.get("/resturents/:resturenId", IsAuthenticated_1.default, ResturentController_1.GetSingleResturent);
 exports.resturentRoute.put("/update-resturent", IsAuthenticated_1.IsAdmin, multer_1.default.single("image"), ResturentController_1.UpdateResturent);
+exports.resturentRoute.put("/delete/:id", IsAuthenticated_1.IsAdmin, ResturentController_1.deleteRestaurant);
 // order
 exports.resturentRoute.get("/order", IsAuthenticated_1.default, ResturentController_1.GetOrders);
 exports.resturentRoute.put("/order/status/:orderId", IsAuthenticated_1.default, ResturentController_1.updateStatus);

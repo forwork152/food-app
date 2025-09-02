@@ -12,9 +12,8 @@ exports.registerValidator = [
     (0, express_validator_1.body)("email").isEmail().withMessage("Invalid email format"),
     (0, express_validator_1.body)("password")
         .isLength({ min: 4 })
-        .withMessage("Password must be at least 6 characters long")
-        .matches(/\d/)
-        .withMessage("Password must contain at least one number"),
+        .withMessage("Password must be at least 4 characters long")
+        .withMessage("please Type correct Password"),
     (0, express_validator_1.body)("phone")
         .trim()
         .notEmpty()

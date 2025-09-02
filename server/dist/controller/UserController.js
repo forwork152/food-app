@@ -12,13 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CaptainLogin = exports.CaptainRegister = exports.UpdateProfile = exports.CheckAuth = exports.forgotPassword = exports.logout = exports.UserLogin = exports.UserRegister = void 0;
+exports.CaptainLogin = exports.CaptainRegister = exports.GetAllUsers = exports.UpdateProfile = exports.CheckAuth = exports.forgotPassword = exports.logout = exports.UserLogin = exports.UserRegister = void 0;
 const UserSchema_1 = __importDefault(require("../models/UserSchema"));
 const User_service_1 = require("../service/User.service");
 const express_validator_1 = require("express-validator");
 const Admin_service_1 = require("../service/Admin.service");
 const UserRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("Received Request Body:", req.body);
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -45,7 +44,6 @@ const UserLogin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    console.log("Received Data:", req.body);
     const { email, password } = req.body;
     try {
         const user = yield (0, User_service_1.LoginService)(email, password, res);
@@ -129,6 +127,16 @@ const UpdateProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.UpdateProfile = UpdateProfile;
+const GetAllUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const users = yield UserSchema_1.default.find().select("-password");
+        return res.status(200).json({ users, success: true });
+    }
+    catch (error) {
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.GetAllUsers = GetAllUsers;
 //  Admin Authentication
 const CaptainRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = (0, express_validator_1.validationResult)(req);

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetSingleResturent = exports.searchByCuisines = exports.searchByCityOrRestaurantName = exports.searchByLocation = exports.updateStatus = exports.GetOrders = exports.UpdateResturent = exports.GetResturent = exports.CreateResturent = void 0;
+exports.GetSingleResturent = exports.searchByCuisines = exports.searchByCityOrRestaurantName = exports.searchByLocation = exports.updateStatus = exports.GetOrders = exports.deleteRestaurant = exports.UpdateResturent = exports.GetResturent = exports.CreateResturent = void 0;
 const ResturentSchema_1 = __importDefault(require("../models/ResturentSchema"));
 const ImageUpload_1 = __importDefault(require("../helper/ImageUpload"));
 const OrderSchema_1 = __importDefault(require("../models/OrderSchema"));
@@ -98,6 +98,29 @@ const UpdateResturent = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.UpdateResturent = UpdateResturent;
+const deleteRestaurant = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const restaurant = yield ResturentSchema_1.default.findByIdAndDelete(id); // MongoDB style
+        // For PostgreSQL/SQL: await prisma.restaurant.delete({ where: { id: Number(id) } });
+        if (!restaurant) {
+            return res
+                .status(404)
+                .json({ success: false, message: "Restaurant not found" });
+        }
+        return res
+            .status(200)
+            .json({ success: true, message: "Restaurant deleted successfully" });
+    }
+    catch (error) {
+        console.error("Error deleting restaurant:", error.message);
+        return res
+            .status(500)
+            .json({ success: false, message: "Internal Server Error" });
+    }
+});
+exports.deleteRestaurant = deleteRestaurant;
+// orders
 const GetOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const orders = yield (0, Restaurent_service_1.GetOrderService)(req.id);

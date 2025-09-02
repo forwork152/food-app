@@ -17,6 +17,7 @@ userRoute.route("/regester").post(AuthValidators_2.registerValidator, UserContro
 userRoute.route("/login").post(AuthValidators_1.loginValidator, UserController_1.UserLogin);
 userRoute.route("/logout").post(UserController_1.logout);
 userRoute.route("/forgot-password").post(UserController_1.forgotPassword);
+userRoute.route("/all-users").get(IsAuthenticated_1.default, UserController_1.GetAllUsers);
 userRoute.route("/profile/update").put(IsAuthenticated_1.default, // Handle single file upload
 UserController_1.UpdateProfile);
 // admin routes
