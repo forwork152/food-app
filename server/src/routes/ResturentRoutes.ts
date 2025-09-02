@@ -2,6 +2,7 @@ import express from "express";
 import upload from "../middlewares/multer";
 import {
   CreateResturent,
+  deleteRestaurant,
   GetOrders,
   GetResturent,
   GetSingleResturent,
@@ -41,6 +42,7 @@ resturentRoute.put(
   upload.single("image"),
   UpdateResturent
 );
+resturentRoute.put("/delete/:id", IsAdmin, deleteRestaurant);
 
 // order
 resturentRoute.get("/order", IsAuthenticated, GetOrders);

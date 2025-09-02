@@ -72,7 +72,7 @@ const AddResturents = () => {
         cusines: [],
         image: undefined,
       });
-      window.location.href = "/";
+      window.location.href = "admin";
       setError({});
     } catch (error: any) {
       toast.error(error.message || "Error creating restaurant");

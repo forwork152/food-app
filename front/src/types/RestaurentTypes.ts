@@ -27,6 +27,8 @@ export type ResturentTypes = {
   createResturents: (formdata: FormData) => void;
   getResturent: () => void;
   handlePermit: () => void;
+  deleteResturent: (id: string) => Promise<void>;
+
   updateResturent: (formdata: FormData) => void;
   addMenuResturent: (menuId: string) => Promise<void>;
   updatedMenuResturent: (updateMenu: any) => Promise<any>;

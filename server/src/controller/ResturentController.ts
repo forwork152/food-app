@@ -131,6 +131,35 @@ export const UpdateResturent = async (
   }
 };
 
+export const deleteRestaurant = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
+  try {
+    const { id } = req.params;
+
+    const restaurant = await ResturentModel.findByIdAndDelete(id); // MongoDB style
+    // For PostgreSQL/SQL: await prisma.restaurant.delete({ where: { id: Number(id) } });
+
+    if (!restaurant) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Restaurant not found" });
+    }
+
+    return res
+      .status(200)
+      .json({ success: true, message: "Restaurant deleted successfully" });
+  } catch (error: any) {
+    console.error("Error deleting restaurant:", error.message);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
+
+// orders
+
 export const GetOrders = async (req: Request, res: Response): Promise<any> => {
   try {
     const orders = await GetOrderService(req.id);

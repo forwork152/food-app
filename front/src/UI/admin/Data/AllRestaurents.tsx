@@ -14,13 +14,14 @@ import useResturent from "@/store/UseResturent";
 import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
+import DeleteButton from "./DeleteButton";
 
 export default function RestaurantTable() {
   const params = useParams();
   // const navigate = useNavigate();
 
-  const { singleResturent, getSingleRestaurent, loading } = useResturent();
+  const { singleResturent, getSingleRestaurent, deleteResturent, loading } =
+    useResturent();
   useEffect(() => {
     const paramsId = params.id!;
     getSingleRestaurent(paramsId);
@@ -33,6 +34,8 @@ export default function RestaurantTable() {
       </div>
     );
   }
+
+  // delete resturent
 
   if (!singleResturent) {
     return (
@@ -117,9 +120,10 @@ export default function RestaurantTable() {
                   <FaEdit />
                 </button>
               </Link>
-              <button className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">
-                <MdDelete />
-              </button>
+              <DeleteButton
+                deleteResturent={deleteResturent}
+                id={singleResturent?._id}
+              />
             </TableCell>
           </TableRow>
         </TableBody>

@@ -64,6 +64,30 @@ const useResturent = create<ResturentTypes>()(
       handlePermit: () => {
         set({ permit: false });
       },
+      deleteResturent: async (id: string) => {
+        try {
+          set({ loading: true });
+          const res = await axios.delete(
+            `${API_ENDPOINT}/delete-resturent/${id}`
+          );
+
+          if (res.data.success) {
+            toast.success(res.data.message);
+            // optional: update local state after delete
+            set((state) => ({
+              resturent: state.resturent
+                ? state.resturent.filter((r: any) => r._id !== id)
+                : null,
+            }));
+          }
+        } catch (error: any) {
+          toast.error(
+            error.response?.data?.message || "Error deleting restaurant"
+          );
+        } finally {
+          set({ loading: false });
+        }
+      },
 
       reset: () => {
         set({
