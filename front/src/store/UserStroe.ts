@@ -37,29 +37,35 @@ export const UserStore = create<UserState>()(
       signup: async (input: signupInpt) => {
         try {
           set({ loading: true });
-          const response = await axios.post(`${API_ENDPOINT}/regester`, input, {
+
+          const response = await axios.post(`${API_ENDPOINT}/register`, input, {
             headers: {
               "Content-Type": "application/json",
             },
           });
-          toast.error(response.data);
 
           if (response.data.success) {
+            toast.success(response.data.message || "Signup successful!");
             set({
               user: response.data.user, // Set user data
               loading: false,
               isAuthentiacte: true,
               isCheckAuth: false,
-              // Set authentication state to true
             });
+            return true;
+          } else {
+            toast.error(response.data.message || "Signup failed");
+            set({ loading: false });
+            return false;
           }
-          return true;
         } catch (error: unknown) {
           const err = error as AxiosError<{ message: string }>;
-          toast.error(err.response?.data.message || "An error occurred");
+          toast.error(err.response?.data?.message || "An error occurred");
           set({ loading: false });
+          return false;
         }
       },
+
       login: async (input: loginInpt) => {
         try {
           set({ loading: true });
@@ -67,10 +73,14 @@ export const UserStore = create<UserState>()(
             headers: {
               "Content-Type": "application/json",
             },
+            withCredentials: true, // important if using cookies/session
           });
+
           if (response.data.success) {
             set({
               user: response.data.user,
+              isAuthentiacte: true, // 👈 mark user as logged in
+              isAdmin: response.data.user?.isAdmin || false, // 👈 update admin flag too
               loading: false,
             });
           }
@@ -79,9 +89,10 @@ export const UserStore = create<UserState>()(
           const err = error as AxiosError<{ message: string }>;
           set({ loading: false });
           toast.error(err.response?.data?.message || "An error occurred");
-          toast.error(err.message);
+          return false; // 👈 make sure you return false on error
         }
       },
+
       Getusers: async () => {
         try {
           set({ loading: true });
