@@ -86,8 +86,6 @@ const AddResturents = () => {
     fetchData();
   }, []);
 
-  console.log("single restaurent :", singleResturent);
-
   useEffect(() => {
     if (singleResturent) {
       setResturentForm({

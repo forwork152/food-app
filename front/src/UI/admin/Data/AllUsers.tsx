@@ -31,8 +31,6 @@ const AllUsers = () => {
     }
   }, []);
 
-  console.log("allUsers", allUsers);
-
   // Mock data - replace with actual API call later
 
   return (

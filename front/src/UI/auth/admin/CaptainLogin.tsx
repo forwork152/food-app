@@ -31,7 +31,7 @@ const CaptainLogin = () => {
       const success = await CaptainLoginApi(input);
       if (success) {
         toast.success("Login Successfully");
-        navigate("/", { replace: true });
+        navigate("/admin", { replace: true });
       }
     } catch (error: unknown) {
       const err = error as AxiosError<{ message: string }>;

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Store,
   ChefHat,
@@ -16,9 +16,18 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import useResturent from "@/store/UseResturent";
 
 export default function FoodPandaDashboard() {
   const [selectedPeriod, setSelectedPeriod] = useState("week");
+  const {  getResturent } = useResturent();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await getResturent();
+    };
+    fetchData();
+  }, []);
 
   // Mock data for the dashboard
   const dashboardStats = {
@@ -33,7 +42,7 @@ export default function FoodPandaDashboard() {
   const recentOrders = [
     {
       id: 1,
-      restaurant: "Spice Garden",
+      restaurant: "KFC - Peshawar",
       items: 3,
       amount: 850,
       status: "delivered",
@@ -66,10 +75,10 @@ export default function FoodPandaDashboard() {
   ];
 
   const topRestaurants = [
-    { name: "Spice Garden", orders: 45, revenue: 12500, rating: 4.8 },
-    { name: "Pizza Palace", orders: 38, revenue: 9800, rating: 4.7 },
+    { name: "KFC - Peshawar", orders: 45, revenue: 12500, rating: 4.8 },
+    { name: "Pizza Hub", orders: 38, revenue: 9800, rating: 4.7 },
     { name: "Burger Hub", orders: 32, revenue: 8200, rating: 4.5 },
-    { name: "Sushi Express", orders: 28, revenue: 11200, rating: 4.9 },
+    { name: "Cheziuse Express", orders: 28, revenue: 11200, rating: 4.9 },
   ];
 
   return (

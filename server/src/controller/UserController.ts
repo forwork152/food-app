@@ -152,7 +152,7 @@ export const GetAllUsers = async (
 ): Promise<any> => {
   try {
     const users = await UserModel.find().select("-password");
-    
+
     return res.status(200).json({ users, success: true });
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
