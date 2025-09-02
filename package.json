@@ -5,8 +5,8 @@
   "scripts": {
     "build": "npm run build:front && npm run build:server",
     "build:front": "cd front && npm install && npm run build",
-    "build:server": "npx tsc -p server/tsconfig.json",
-    "start": "nodemon server/dist/index.js",
+    "build:server": "tsc -p server/tsconfig.json",
+    "start": "node server/dist/index.js",
     "dev": "nodemon server/src/index.ts"
   },
   "keywords": [],
