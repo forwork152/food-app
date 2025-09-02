@@ -38,7 +38,7 @@ export const UserStore = create<UserState>()(
         try {
           set({ loading: true });
 
-          const response = await axios.post(`${API_ENDPOINT}/register`, input, {
+          const response = await axios.post(`${API_ENDPOINT}/regester`, input, {
             headers: {
               "Content-Type": "application/json",
             },

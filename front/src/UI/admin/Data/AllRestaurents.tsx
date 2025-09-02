@@ -36,8 +36,13 @@ export default function RestaurantTable() {
 
   if (!singleResturent) {
     return (
-      <div className="flex min-h-[200px] items-center justify-center">
+      <div className="flex flex-col min-h-[200px] items-center justify-center gap-4">
         <p className="text-lg text-gray-500">No restaurant found</p>
+        <Link to="/admin/add-resturents">
+          <button className="bg-gradient-to-r from-[#FF2B85] to-[#FF6CAB] text-white font-semibold py-2 px-6 rounded-2xl shadow-md hover:scale-105 transition-transform">
+            ➕ Add Restaurant
+          </button>
+        </Link>
       </div>
     );
   }
