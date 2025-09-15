@@ -6,6 +6,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 const API_ENDPOINT = `${API_URL}/api/v1/resturent`;
+axios.defaults.baseURL = API_URL;
 
 export interface SearchStoreState {
   loading: boolean;

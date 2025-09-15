@@ -29,9 +29,12 @@ import Dashboard from "./UI/Layout/Dashboard";
 import RestaurantTable from "./UI/admin/Data/AllRestaurents";
 import AllUsers from "./UI/admin/Data/AllUsers";
 import FoodPandaDashboard from "./UI/admin/DashboardHome";
+import axios from "axios";
 
 function App() {
   const API_URL = import.meta.env.VITE_BACKEND_URL;
+  axios.defaults.baseURL = API_URL;
+
   // Protected Routes
 
   const ProtectedRoutes = ({ children }: { children: React.ReactNode }) => {

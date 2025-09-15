@@ -13,6 +13,7 @@ type MenuState = {
 };
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
+axios.defaults.baseURL = API_URL;
 
 const API_ENDPOINT = `${API_URL}/api/v1/menu`;
 

@@ -12,6 +12,7 @@ type MyPersist = (
 ) => StateCreator<OrderStore>;
 
 const API_ENDPOINT = `${API_URL}/api/v1/order`;
+axios.defaults.baseURL = API_URL;
 
 const UseOrderStore = create<OrderStore>(
   (persist as MyPersist)(
