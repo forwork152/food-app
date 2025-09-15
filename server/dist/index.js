@@ -68,7 +68,7 @@ const startServer = () =>
     // CORS setup
     app.use(
       (0, cors_1.default)({
-        origin: "https://food-app-2-edyy.onrender.com",
+        origin: "https://food-delivery-app-production-6026.up.railway.app",
         credentials: true,
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
         allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
