@@ -9,6 +9,7 @@ import client from "@/lib/apolloClient";
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 const API_ENDPOINT = `${API_URL}/api/v1/resturent`;
 axios.defaults.withCredentials = true;
+axios.defaults.baseURL = API_URL;
 
 // Graph Ql integration
 
